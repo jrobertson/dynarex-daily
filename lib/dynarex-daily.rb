@@ -23,6 +23,10 @@ class DynarexDaily < Dynarex
       create_file
     end
   end
+  
+  def save()
+    super(@filename, pretty: true)
+  end
 
   private
   
@@ -32,7 +36,7 @@ class DynarexDaily < Dynarex
     
     initialize('entries[date]/entry(time, desc)')
     summary[:date] = Time.now.to_s
-    save @filename
+    self.save
   end
 
   def archive_file()

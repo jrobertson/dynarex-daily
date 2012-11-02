@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-# file: dynarex-daily.rb[4~
+# file: dynarex-daily.rb
 
 require 'dynarex'
 require 'fileutils'
@@ -23,13 +23,20 @@ class DynarexDaily < Dynarex
       create_file
     end
   end
+  
+  def save()
+    super(@filename)
+  end
 
+  private
+  
   def create_file()
+    
     FileUtils.touch @filename
+    
     initialize('entries[date]/entry(time, desc)')
     summary[:date] = Time.now.to_s
-    puts to_xml
-    save @filename
+    self.save
   end
 
   def archive_file()
