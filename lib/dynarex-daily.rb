@@ -25,7 +25,7 @@ class DynarexDaily < Dynarex
   end
   
   def save()
-    super(@filename, pretty: true)
+    super(@filename)
   end
 
   private
@@ -36,6 +36,7 @@ class DynarexDaily < Dynarex
     
     initialize('entries[date]/entry(time, desc)')
     summary[:date] = Time.now.to_s
+    summary[:order] = 'descending'
     self.save
   end
 

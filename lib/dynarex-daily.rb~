@@ -25,7 +25,7 @@ class DynarexDaily < Dynarex
   end
   
   def save()
-    super(@filename)
+    super(@filename, pretty: true)
   end
 
   private
