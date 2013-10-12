@@ -7,8 +7,9 @@ require 'fileutils'
 
 class DynarexDaily < Dynarex
 
-  def initialize(stringx=nil)
+  def initialize(stringx=nil, options={})
 
+    @opt = {dir_archive: :days}.merge options
     @filename = 'dynarexdaily.xml'
     super(stringx) if stringx
 
@@ -16,7 +17,7 @@ class DynarexDaily < Dynarex
       super(@filename)
       if !summary[:date].empty? and \
           Time.parse(summary[:date]).day != Time.now.day then
-        archive_file
+        archive_file Time.parse(summary[:date])
         create_file
       end  
     else
@@ -40,10 +41,17 @@ class DynarexDaily < Dynarex
     self.save
   end
 
-  def archive_file()
-    dir = 'days'
-    FileUtils.mkdir dir unless File.exist? dir
-    FileUtils.mv(@filename, "%s/%s" % [dir, Time.now.strftime("d%d%m%y.xml")])
+  def archive_file(t)
+
+    if @opt[:dir_archive] == :days then
+      dir, file = 'days', t.strftime("d%d%m%y.xml")
+    else
+      dir, file = t.strftime("%Y/%b/%d").downcase, 'index.xml'
+    end
+
+    FileUtils.mkdir_p dir unless File.exist? dir
+    FileUtils.mv(@filename, "%s/%s" % [dir, file])
+
   end
 
 end
