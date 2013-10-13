@@ -36,7 +36,7 @@ class DynarexDaily < Dynarex
       blk = lambda do |xml| 
         a = xml.lines.to_a
         line1 = a.shift
-        a.unshift @xml_instruction
+        a.unshift @xml_instruction + "\n"
         a.unshift line1
         a.join
       end  
