@@ -27,7 +27,7 @@ class DynarexDaily < Dynarex
     end
   end
   
-  def save()
+  def save(filename='dynarexdaily.xml', options={})
 
     blk = nil
 
@@ -42,7 +42,7 @@ class DynarexDaily < Dynarex
       end  
     end
 
-    super(@filename, &blk)
+    super(filename, options, &blk)
 
   end
 
@@ -60,6 +60,7 @@ class DynarexDaily < Dynarex
 
   def archive_file(t)
 
+    puts 'inside archive_file'
     if @opt[:dir_archive] == :days then
       dir, file = 'days', t.strftime("d%d%m%y.xml")
     else
