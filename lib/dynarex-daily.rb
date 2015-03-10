@@ -13,6 +13,8 @@ class DynarexDaily < Dynarex
 
     @opt = {dir_archive: :days}.merge options
     @filename = 'dynarexdaily.xml'
+    @schema = 'entries[date]/entry(time, desc)'
+    
     super(stringx) if stringx
 
     if File.exist?(@filename) then 
@@ -45,6 +47,12 @@ class DynarexDaily < Dynarex
     super(filename, options, &blk)
 
   end
+  
+  def schema=(s)
+    super(s.sub(/^\w+(?=\/)/,'\0[date]'))
+    summary[:date] = Time.now.to_s
+    summary[:order] = 'descending'    
+  end
 
   private
   
@@ -52,7 +60,7 @@ class DynarexDaily < Dynarex
     
     FileUtils.touch @filename
     
-    initialize('entries[date]/entry(time, desc)')
+    initialize(@schema)
     summary[:date] = Time.now.to_s
     summary[:order] = 'descending'
     save
@@ -60,7 +68,6 @@ class DynarexDaily < Dynarex
 
   def archive_file(t)
 
-    puts 'inside archive_file'
     if @opt[:dir_archive] == :days then
       dir, file = 'days', t.strftime("d%d%m%y.xml")
     else
