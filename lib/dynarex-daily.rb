@@ -22,7 +22,7 @@ class DynarexDaily < Dynarex
       super(@filename)
       
       if !summary[:date].empty? and \
-          Date.parse(summary[:date]).day != Date.today then
+          Date.parse(summary[:date]) != Date.today then
         
         archive_file Date.parse(summary[:date])
         create_file
