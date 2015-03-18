@@ -17,11 +17,14 @@ class DynarexDaily < Dynarex
     
     super(stringx) if stringx
 
-    if File.exist?(@filename) then 
+    if File.exist?(@filename) then
+      
       super(@filename)
+      
       if !summary[:date].empty? and \
-          Time.parse(summary[:date]).day != Time.now.day then
-        archive_file Time.parse(summary[:date])
+          Date.parse(summary[:date]).day != Date.today then
+        
+        archive_file Date.parse(summary[:date])
         create_file
       end  
     else
@@ -50,7 +53,7 @@ class DynarexDaily < Dynarex
   
   def schema=(s)
     super(s.sub(/^\w+(?=\/)/,'\0[date]'))
-    summary[:date] = Time.now.to_s
+    summary[:date] = Date.today.to_s
     summary[:order] = 'descending'    
   end
 
@@ -61,7 +64,7 @@ class DynarexDaily < Dynarex
     FileUtils.touch @filename
     
     initialize(@schema)
-    summary[:date] = Time.now.to_s
+    summary[:date] = Date.today.to_s
     summary[:order] = 'descending'
     save
   end
