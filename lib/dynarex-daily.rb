@@ -18,7 +18,7 @@ class DynarexDaily < Dynarex
     
     if File.exist?(@filename) then
       
-      super(@filename)
+      super @filename
       
       if !summary[:date].empty? and \
           Date.parse(summary[:date]) != Date.today then
@@ -28,9 +28,10 @@ class DynarexDaily < Dynarex
       end  
       
     else
+      super @schema
       create_file
     end
-  end
+  end  
   
   def save(filename='dynarexdaily.xml', options={})
 
