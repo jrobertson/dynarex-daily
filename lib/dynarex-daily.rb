@@ -14,9 +14,8 @@ class DynarexDaily < Dynarex
     @opt = {dir_archive: :days}.merge options
     @filename = 'dynarexdaily.xml'
     @schema = 'entries[date]/entry(time, desc)'
+    @default_key = 'uid'
     
-    super(stringx) if stringx
-
     if File.exist?(@filename) then
       
       super(@filename)
@@ -27,6 +26,7 @@ class DynarexDaily < Dynarex
         archive_file Date.parse(summary[:date])
         create_file
       end  
+      
     else
       create_file
     end
@@ -60,21 +60,20 @@ class DynarexDaily < Dynarex
   private
   
   def create_file()
-    
-    FileUtils.touch @filename
-    
-    initialize(@schema)
+       
+    openx(@schema)
     summary[:date] = Date.today.to_s
     summary[:order] = 'descending'
+
     save
   end
 
   def archive_file(t)
 
-    if @opt[:dir_archive] == :days then
-      dir, file = 'days', t.strftime("d%d%m%y.xml")
+    dir, file = if @opt[:dir_archive] == :days then
+      ['days', t.strftime("d%d%m%y.xml")]
     else
-      dir, file = t.strftime("%Y/%b/%d").downcase, 'index.xml'
+      [t.strftime("%Y/%b/%d").downcase, 'index.xml']
     end
 
     FileUtils.mkdir_p dir unless File.exist? dir
