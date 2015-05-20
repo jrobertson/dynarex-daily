@@ -24,7 +24,6 @@ class DynarexDaily < Dynarex
           Date.parse(summary[:date]) != Date.today then
         
         archive_file Date.parse(summary[:date])
-        super @schema
         create_file
       end  
       
@@ -63,6 +62,7 @@ class DynarexDaily < Dynarex
   
   def create_file()
        
+    openx(@schema)
     summary[:date] = Date.today.to_s
     summary[:order] = 'descending'
 
