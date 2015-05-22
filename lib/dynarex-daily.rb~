@@ -28,7 +28,7 @@ class DynarexDaily < Dynarex
       end  
       
     else
-      super @schema
+      super( stringx || @schema )
       create_file
     end
   end  
