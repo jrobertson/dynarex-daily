@@ -28,9 +28,10 @@ class DynarexDaily < Dynarex
       end  
       
     else
-      super( stringx || @schema )
+      super( stringx || @schema, @opt )
       create_file
     end
+
     self.xslt = @opt[:xslt] if @opt[:xslt]    
   end  
   
