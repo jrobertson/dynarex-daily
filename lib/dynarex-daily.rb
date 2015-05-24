@@ -11,10 +11,10 @@ class DynarexDaily < Dynarex
   def initialize(stringx=nil, options: {})
 
     @opt = {dir_archive: :days}.merge options
+
     @filename = 'dynarexdaily.xml'
     @schema = 'entries[date]/entry(time, desc)'
     @default_key = 'uid'
-    self.xslt = @opt[:xslt] if @opt[:xslt]
     
     if File.exist?(@filename) then
       
@@ -31,6 +31,7 @@ class DynarexDaily < Dynarex
       super( stringx || @schema )
       create_file
     end
+    self.xslt = @opt[:xslt] if @opt[:xslt]    
   end  
   
   def save(filename='dynarexdaily.xml', options={})
