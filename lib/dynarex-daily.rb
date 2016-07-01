@@ -29,6 +29,7 @@ class DynarexDaily < Dynarex
       
     else
       super( stringx || @schema, @opt )
+      @delimiter = ' # '      
       create_file
     end
 
