@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'dynarex-daily'
-  s.version = '0.2.7'
+  s.version = '0.2.8'
   s.summary = 'A Dynarex flavoured log file for humans which is archived daily'
   s.authors = ['James Robertson']
   s.files = Dir['lib/dynarex-daily.rb']

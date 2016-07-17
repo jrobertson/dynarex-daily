@@ -8,9 +8,9 @@ require 'fileutils'
 class DynarexDaily < Dynarex
 
  
-  def initialize(stringx=nil, options: {})
+  def initialize(stringx=nil, dir_archive: :days, xslt: '')
 
-    @opt = {dir_archive: :days}.merge options
+    @dir_archive = dir_archive
 
     @filename = 'dynarexdaily.xml'
     @schema = 'entries[date]/entry(time, desc)'
@@ -28,12 +28,12 @@ class DynarexDaily < Dynarex
       end  
       
     else
-      super( stringx || @schema, @opt )
+      super( stringx || @schema )
       @delimiter = ' # '      
       create_file
     end
 
-    self.xslt = @opt[:xslt] if @opt[:xslt]    
+    self.xslt = xslt if xslt
   end  
   
   def save(filename='dynarexdaily.xml', options={})
@@ -61,7 +61,7 @@ class DynarexDaily < Dynarex
 
   def archive_file(t)
 
-    dir, file = if @opt[:dir_archive] == :days then
+    dir, file = if @dir_archive == :days then
       ['days', t.strftime("d%d%m%y.xml")]
     else
       [t.strftime("%Y/%b/%d").downcase, 'index.xml']
