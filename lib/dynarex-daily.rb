@@ -8,13 +8,18 @@ require 'fileutils'
 class DynarexDaily < Dynarex
 
  
-  def initialize(stringx=nil, dir_archive: :days, xslt: '')
-
+  def initialize(stringx=nil, dir_archive: :days, xslt: '', 
+                 filename: 'dynarexdaily.xml')
+    
     @dir_archive = dir_archive
 
-    @filename = 'dynarexdaily.xml'
+    @filename = filename
     @schema = 'entries[date]/entry(time, desc)'
     @default_key = 'uid'
+    
+    s, type = RXFHelper.read(stringx)
+    
+    @filename = stringx if type == :file
     
     if File.exist?(@filename) then
       
@@ -36,7 +41,7 @@ class DynarexDaily < Dynarex
     self.xslt = xslt if xslt
   end  
   
-  def save(filename='dynarexdaily.xml', options={})
+  def save(filename=@filename, options={})
 
     super(filename, options)
 
