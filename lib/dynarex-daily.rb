@@ -16,10 +16,11 @@ class DynarexDaily < Dynarex
     @filename = filename
     @schema = 'entries[date]/entry(time, desc)'
     @default_key = 'uid'
-    
-    s, type = RXFHelper.read(stringx)
-    
-    @filename = stringx if type == :file
+
+    if stringx then
+      s, type = RXFHelper.read(stringx)       
+      @filename = stringx if type == :file
+    end
     
     if File.exist?(@filename) then
       
@@ -33,13 +34,27 @@ class DynarexDaily < Dynarex
       end  
       
     else
+      
       super( stringx || @schema )
       @delimiter = ' # '      
       create_file
     end
 
     self.xslt = xslt if xslt
-  end  
+  end
+
+  def create(h)
+    
+    if !summary[:date].empty? and \
+        Date.parse(summary[:date]) != Date.today then
+      
+      archive_file Date.parse(summary[:date])
+      create_file
+    end      
+    
+    super(h)
+  end
+    
   
   def save(filename=@filename, options={})
 
