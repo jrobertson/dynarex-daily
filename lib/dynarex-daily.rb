@@ -3,26 +3,28 @@
 # file: dynarex-daily.rb
 
 require 'dynarex'
-require 'fileutils'
 
-class DynarexDaily < Dynarex
 
+class DynarexDaily < Dynarex  
  
   def initialize(stringx=nil, dir_archive: :days, xslt: '', 
-                 filename: 'dynarexdaily.xml')
+                 filename: 'dynarexdaily.xml', debug: false)
     
     @dir_archive = dir_archive
 
     @filename = filename
     @schema = 'entries[date]/entry(time, desc)'
     @default_key = 'uid'
+    @debug = debug
 
     if stringx then
       s, type = RXFHelper.read(stringx)       
       @filename = stringx if type == :file
     end
     
-    if File.exist?(@filename) then
+    puts 'DynarexDaily::initialize @filename: ' + @filename.inspect  if @debug
+    
+    if FileX.exists?(@filename) then
       
       super @filename
       
@@ -34,8 +36,9 @@ class DynarexDaily < Dynarex
       end  
       
     else
-      
-      super( stringx || @schema )
+      puts 'before super: stringx: ' + stringx.inspect if @debug
+      super( stringx || @schema , debug: debug)
+      puts 'after super' if @debug
       @delimiter = ' # '      
       create_file
     end
@@ -58,6 +61,7 @@ class DynarexDaily < Dynarex
   
   def save(filename=@filename, options={})
 
+    puts 'inside DynarexDaily::save() filename: ' + filename.inspect if @debug
     super(filename, options)
 
   end
@@ -71,7 +75,9 @@ class DynarexDaily < Dynarex
   private
   
   def create_file()
-       
+    
+    puts 'inside DynarexDaily::create_file' if @debug   
+    
     openx(@schema)
     summary[:date] = Date.today.to_s
     summary[:order] = 'descending'
@@ -87,8 +93,8 @@ class DynarexDaily < Dynarex
       [t.strftime("%Y/%b/%d").downcase, 'index.xml']
     end
 
-    FileUtils.mkdir_p dir unless File.exist? dir
-    FileUtils.mv(@filename, "%s/%s" % [dir, file])
+    FileX.mkdir_p dir unless FileX.exist? dir
+    FileX.mv(@filename, "%s/%s" % [dir, file])
 
   end
 

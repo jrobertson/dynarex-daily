@@ -1,10 +1,10 @@
 Gem::Specification.new do |s|
   s.name = 'dynarex-daily'
-  s.version = '0.3.1'
+  s.version = '0.4.0'
   s.summary = 'A Dynarex flavoured log file for humans which is archived daily'
   s.authors = ['James Robertson']
   s.files = Dir['lib/dynarex-daily.rb']
-  s.add_runtime_dependency('dynarex', '~> 1.7', '>=1.7.26') 
+  s.add_runtime_dependency('dynarex', '~> 1.8', '>=1.8.2') 
   s.signing_key = '../privatekeys/dynarex-daily.pem'
   s.cert_chain  = ['gem-public_cert.pem']
   s.license = 'MIT'
