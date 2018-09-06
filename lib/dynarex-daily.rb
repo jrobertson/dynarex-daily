@@ -17,9 +17,11 @@ class DynarexDaily < Dynarex
     @default_key = 'uid'
     @debug = debug
 
+    puts 'DynarexDaily::initialize stringx: ' + stringx.inspect  if @debug
+    
     if stringx then
       s, type = RXFHelper.read(stringx)       
-      @filename = stringx if type == :file
+      @filename = stringx if type == :file or type == :dfs
     end
     
     puts 'DynarexDaily::initialize @filename: ' + @filename.inspect  if @debug
