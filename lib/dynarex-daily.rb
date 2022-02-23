@@ -22,7 +22,7 @@ class DynarexDaily < Dynarex
     puts 'DynarexDaily::initialize stringx: ' + stringx.inspect  if @debug
 
     if stringx then
-      s, type = RXFHelper.read(stringx)
+      s, type = RXFReader.read(stringx)
       @filename = stringx if type == :file or type == :dfs
     end
 
