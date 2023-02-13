@@ -10,12 +10,13 @@ class DynarexDaily < Dynarex
   include RXFileIOModule
  
   def initialize(stringx=nil, dir_archive: :days, xslt: '', 
-                 filename: 'dynarexdaily.xml', debug: false)
+                 filename: 'dynarexdaily.xml', fields: %i(desc), 
+                 autosave: false, order: 'ascending', debug: false)
     
     @dir_archive = dir_archive
 
     @filename = filename
-    @schema = 'entries[date]/entry(time, desc)'
+    @schema = 'entries[date]/entry(time, ' + fields.join(', ') + ')'
     @default_key = 'uid'
     @debug = debug
 
@@ -42,11 +43,13 @@ class DynarexDaily < Dynarex
       
     else
       puts 'before super: stringx: ' + stringx.inspect if @debug
-      super( stringx || @schema , debug: debug)
+      super( stringx || @schema , order: order, debug: debug)
       puts 'after super' if @debug
       @delimiter = ' # '      
       create_file
     end
+                                                        
+    @autosave = autosave
 
     self.xslt = xslt if xslt
   end
@@ -62,7 +65,7 @@ class DynarexDaily < Dynarex
       create_file
     end      
     
-    super(h)
+    super({time: Time.now.to_f.to_s}.merge(h))
   end
     
   
